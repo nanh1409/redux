@@ -1,4 +1,4 @@
-input[type="radio"].selected {
+input.selected {
   background-color: blue;
 }
 
@@ -19,7 +19,7 @@ input{
 }
 
 .container{
-    height: 300px;
+    height: 350px;
     background-color: rgb(237,232,246); 
   padding: 20px;
   border-radius: 10px;
@@ -47,6 +47,11 @@ p{
     margin-left: 200px;
 }
 
+.redo{
+    background-color: rgb(96,0,162);
+    color: white;
+}
+
 p:hover{
     cursor: pointer;
 }
@@ -67,7 +72,7 @@ p:hover{
   position: fixed;
   top: 25%;
   left: 30%;
-  width: 200px;
+  width: 250px;
   height: 200px;
   background-color:pink;
   padding: 20px;
@@ -85,12 +90,23 @@ p:hover{
 }
 
 .popup-dialog button {
+    margin-left: 10px;
   margin-top: 20px;
   background-color: orange;
   color: black;
 }
 
+.button{
+  display: flex;
+}
 
+.correct-answer {
+  color: green;
+}
+
+.incorrect-answer {
+  color: red;
+}
 
 
 
