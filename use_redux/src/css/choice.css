@@ -1,3 +1,11 @@
+.container{
+  display: flex;
+}
+
+.question-container{
+  width: 80%;
+}
+
 input.selected {
   background-color: blue;
 }
@@ -11,7 +19,7 @@ input{
     list-style-type:none ;
 }
 
-.content{
+.question-content{
     background-color: white; 
   padding: 10px;
   margin-bottom: 10px;
@@ -107,6 +115,35 @@ p:hover{
 .incorrect-answer {
   color: red;
 }
+
+.question-status {
+  width: 20%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.question-number {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: lightgray;
+  color: white;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.active {
+  background-color: rgb(96, 0, 162);
+}
+
+.completed {
+  background-color: green;
+}
+
 
 
 

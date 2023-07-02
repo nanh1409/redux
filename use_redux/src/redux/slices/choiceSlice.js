@@ -1,8 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit'
 import questions from './questions';
 
+const shuffleArray = (array) => {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));;
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+}
+
 const initialState = {
-    questions,
+    questions: shuffleArray(questions.map(question => ({
+        ...question,
+        options: shuffleArray(question.options),
+    }))),
     currentQuestionId: 0,
     completed: false,
     correctAnswer: 0,
@@ -56,11 +68,25 @@ export const choiceSlice = createSlice({
         },
         setShowClose: (state) => {
             state.correctAnswer = 0;
-        }
+        },
+        goToQuestion: (state, action) => {
+            state.currentQuestionId = action.payload;
+        },
     },
 })
 
 // Action creators are generated for each case reducer function
-export const { setQuestions, selectAnswer, resetChoiceAll, goBack, goNext, setQuestionCompletion, resultReview, setShowClose, redoTest, viewResult } = choiceSlice.actions
+export const {
+    goToQuestion,
+    selectAnswer,
+    resetChoiceAll,
+    goBack,
+    goNext,
+    setQuestionCompletion,
+    resultReview,
+    setShowClose,
+    redoTest,
+    viewResult
+} = choiceSlice.actions
 
 export default choiceSlice.reducer;
