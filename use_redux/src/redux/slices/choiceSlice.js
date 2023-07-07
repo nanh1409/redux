@@ -1,5 +1,7 @@
-import { createSlice } from '@reduxjs/toolkit'
-import questions from './questions';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import React, { useMemo, useState, useEffect } from 'react';
+// import axios from '../../axios';
+import axios from 'axios';
 
 const shuffleArray = (array) => {
     const shuffled = [...array];
@@ -10,20 +12,28 @@ const shuffleArray = (array) => {
     return shuffled;
 }
 
+export const fetchData = createAsyncThunk('choice/fetchData', async () => {
+    return axios
+        .get('http://localhost:8081/api/questions')
+        .then((response) => response.data)
+})
+
 const initialState = {
-    questions: shuffleArray(questions.map(question => ({
-        ...question,
-        options: shuffleArray(question.options),
-    }))),
+    loading: false,
+    error: '',
+    questions: [],
     currentQuestionId: 0,
     completed: false,
     correctAnswer: 0,
 }
 
-export const choiceSlice = createSlice({
+const choiceSlice = createSlice({
     name: 'choice',
     initialState,
     reducers: {
+        getDataQuestion: (state, action) => {
+            state.questions = action.payload
+        },
         selectAnswer: (state, action) => {
             const { questionId, answer } = action.payload;
             state.questions[questionId].answer = answer;
@@ -73,7 +83,24 @@ export const choiceSlice = createSlice({
             state.currentQuestionId = action.payload;
         },
     },
+    extraReducers: (builder) => {
+        builder.addCase(fetchData.pending, (state) => {
+            state.loading = true
+        })
+        builder.addCase(fetchData.fulfilled, (state, action) => {
+            state.loading = false
+            state.questions = action.payload
+            console.log("action:", state.questions)
+
+        })
+        builder.addCase(fetchData.rejected, (state, action) => {
+            state.loading = false
+            state.error = action.payload
+        })
+    },
 })
+
+
 
 // Action creators are generated for each case reducer function
 export const {
@@ -86,7 +113,9 @@ export const {
     resultReview,
     setShowClose,
     redoTest,
-    viewResult
+    viewResult,
+    addCase,
+    getDataQuestion
 } = choiceSlice.actions
 
 export default choiceSlice.reducer;

@@ -1,5 +1,6 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { addCase, fetchData } from '../redux/slices/choiceSlice';
 import {
     selectAnswer,
     resetChoiceAll,
@@ -11,17 +12,26 @@ import {
     setShowClose,
     viewResult,
     goToQuestion,
+    getDataQuestion,
 } from '../redux/slices/choiceSlice';
 import '../css/choice.css';
 
-export function Choice() {
+export const Choice = () => {
     const [showReview, setShowReview] = useState(false);
     const [showAnswer, setShowAnswer] = useState(false);
     const currentQuestionId = useSelector((state) => state.choice.currentQuestionId);
-    const questions = useSelector((state) => state.choice.questions);
     const correctAnswer = useSelector((state) => state.choice.correctAnswer);
-
+    const questions = useSelector((state) => {
+        console.log("state...", state.choice);
+        return state.choice.questions;
+    })
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(fetchData())
+    }, [])
+
+    console.log("Choice ~ questions:", questions)
 
     const handleAnswerSelect = (questionId, answer) => {
         dispatch(selectAnswer({ questionId, answer }));
@@ -33,6 +43,7 @@ export function Choice() {
     const handleResetChoiceAll = () => {
         dispatch(resetChoiceAll());
     };
+
     const handlePrevious = () => {
         dispatch(goBack());
     };
@@ -60,17 +71,19 @@ export function Choice() {
     const handleRedoTest = () => {
         setShowReview(false);
         dispatch(redoTest());
-        setShowAnswer(false)
+        setShowAnswer(false);
     };
 
     const allQuestionsCompleted = useMemo(() => {
         return questions.every((question) => question.completed);
-    }, [questions])
+    }, [questions]);
 
     const currentQuestion = questions[currentQuestionId];
 
     return (
+
         <div className="container">
+            <div>{questions}</div>
             <div className="question-status">
                 {questions.map((question, index) => (
                     <div
@@ -90,8 +103,7 @@ export function Choice() {
                     <h3> Question {currentQuestionId + 1}: {currentQuestion.question}</h3>
                     <ul className="ul">
                         {currentQuestion.options.map((option, index) => (
-
-                            <li key={index} >
+                            <li key={index}>
                                 <label
                                     className={showAnswer
                                         ? currentQuestion.answer === currentQuestion.trueAnswer
@@ -119,7 +131,6 @@ export function Choice() {
                             </li>
                         ))}
                     </ul>
-
                 </div>
                 <div className="block">
                     <button
@@ -156,7 +167,6 @@ export function Choice() {
                             </div>
                         </div>
                     )}
-
                 </div>
             </div>
         </div>

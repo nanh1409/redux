@@ -1,5 +1,5 @@
 import React from 'react';
-import { Choice } from './components/Choice';
+import Choice from './components/Choice';
 import { Provider } from 'react-redux';
 import { store } from './redux/app/store';
 
