@@ -3,7 +3,7 @@ import React, { useMemo, useState, useEffect } from 'react';
 // import axios from '../../axios';
 import axios from 'axios';
 
-const shuffleArray = (array) => {
+export const shuffleArray = (array) => {
     const shuffled = [...array];
     for (let i = shuffled.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));;
@@ -40,7 +40,10 @@ const choiceSlice = createSlice({
             state.loading = false
             state.questions = action.payload
             state.error = ''
-            console.log("action:", state.questions)
+            state.questions = shuffleArray(state.questions.map(question => ({
+                ...question,
+                options: shuffleArray(question.options)
+            })))
 
         })
         builder.addCase(fetchData.rejected, (state, action) => {

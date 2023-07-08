@@ -14,8 +14,8 @@ let test = (req, res) => {
 
 let getBlog = async (req, res) => {
     Blog.find()
-        .then(blogs => {
-            res.json(blogs);
+        .then(questions => {
+            res.json(questions);
         })
         .catch(err => {
             console.log(err);

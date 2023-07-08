@@ -12,4 +12,18 @@ const databaseConnect = () => {
     })
 }
 
+// const question3 = new Blog({
+//     id: 1,
+//     question: "This luggage is quite similar to ........",
+//     options: [
+//         { id: 'A', text: 'that one' },
+//         { id: 'B', text: 'those' },
+//         { id: 'C', text: 'in additional' },
+//         { id: 'D', text: 'that' }],
+//     answer: null,
+//     trueAnswer: "A",
+// })
+
+// question3.save()
+
 module.exports = databaseConnect;

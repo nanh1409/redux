@@ -2,22 +2,14 @@ import mongoose from "mongoose";
 const { Schema, model } = mongoose;
 
 const blogSchema = new Schema({
-    question: {
-        type: String,
-        required: true,
-    },
+    id: Number,
+    question: String,
     options: [{
-        type: Map,
-        of: String
+        id: String,
+        text: String,
     }],
-    answer: {
-        type: String,
-        required: false,
-    },
-    trueAnswer: {
-        type: String,
-        required: true,
-    }
+    answer: String,
+    trueAnswer: String
 })
 
 const Blog = model('Blog', blogSchema);
