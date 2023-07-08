@@ -12,12 +12,6 @@ const shuffleArray = (array) => {
     return shuffled;
 }
 
-export const fetchData = createAsyncThunk('choice/fetchData', async () => {
-    return axios
-        .get('http://localhost:8081/api/questions')
-        .then((response) => response.data)
-})
-
 const initialState = {
     loading: false,
     error: '',
@@ -27,9 +21,34 @@ const initialState = {
     correctAnswer: 0,
 }
 
+export const fetchData = createAsyncThunk('choice/fetchData', () => {
+    return axios
+        .get('http://localhost:8081/api/questions')
+        .then((response) => response.data)
+})
+
+
+
 const choiceSlice = createSlice({
     name: 'choice',
     initialState,
+    extraReducers: (builder) => {
+        builder.addCase(fetchData.pending, (state) => {
+            state.loading = true
+        })
+        builder.addCase(fetchData.fulfilled, (state, action) => {
+            state.loading = false
+            state.questions = action.payload
+            state.error = ''
+            console.log("action:", state.questions)
+
+        })
+        builder.addCase(fetchData.rejected, (state, action) => {
+            state.loading = false
+            state.questions = []
+            state.error = action.error.message
+        })
+    },
     reducers: {
         getDataQuestion: (state, action) => {
             state.questions = action.payload
@@ -83,21 +102,7 @@ const choiceSlice = createSlice({
             state.currentQuestionId = action.payload;
         },
     },
-    extraReducers: (builder) => {
-        builder.addCase(fetchData.pending, (state) => {
-            state.loading = true
-        })
-        builder.addCase(fetchData.fulfilled, (state, action) => {
-            state.loading = false
-            state.questions = action.payload
-            console.log("action:", state.questions)
 
-        })
-        builder.addCase(fetchData.rejected, (state, action) => {
-            state.loading = false
-            state.error = action.payload
-        })
-    },
 })
 
 

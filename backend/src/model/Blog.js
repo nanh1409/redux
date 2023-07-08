@@ -7,8 +7,8 @@ const blogSchema = new Schema({
         required: true,
     },
     options: [{
-        type: Array,
-        required: true,
+        type: Map,
+        of: String
     }],
     answer: {
         type: String,

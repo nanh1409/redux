@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { addCase, fetchData } from '../redux/slices/choiceSlice';
+import { fetchData } from '../redux/slices/choiceSlice';
 import {
     selectAnswer,
     resetChoiceAll,
@@ -23,13 +23,15 @@ export const Choice = () => {
     const correctAnswer = useSelector((state) => state.choice.correctAnswer);
     const questions = useSelector((state) => {
         console.log("state...", state.choice);
-        return state.choice.questions;
+        return state.choice;
     })
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(fetchData())
     }, [])
+
+    dispatch(fetchData())
 
     console.log("Choice ~ questions:", questions)
 
@@ -75,17 +77,19 @@ export const Choice = () => {
     };
 
     const allQuestionsCompleted = useMemo(() => {
-        return questions.every((question) => question.completed);
+        return questions.length ?
+            questions.every((question) => question.completed)
+            : false
     }, [questions]);
 
-    const currentQuestion = questions[currentQuestionId];
+    const currentQuestion = questions.length ? questions[currentQuestionId] : null
 
     return (
 
         <div className="container">
             <div>{questions}</div>
             <div className="question-status">
-                {questions.map((question, index) => (
+                {questions.length && questions.map((question, index) => (
                     <div
                         key={question.id}
                         className={`question-number ${currentQuestionId === index ? 'active' : (question.completed ? 'completed' : '')}`}
@@ -95,14 +99,15 @@ export const Choice = () => {
                     </div>
                 ))}
             </div>
+
             <div className='question-container'>
                 <div className="question-content">
                     <h2 className={showAnswer ? (currentQuestion.answer === currentQuestion.trueAnswer ? 'correct-answer ' : 'incorrect-answer') : ''}>
                         {showAnswer ? (currentQuestion.answer === currentQuestion.trueAnswer ? 'TRUE' : 'FALSE') : ''}
                     </h2>
-                    <h3> Question {currentQuestionId + 1}: {currentQuestion.question}</h3>
-                    <ul className="ul">
-                        {currentQuestion.options.map((option, index) => (
+                    <h3> Question {currentQuestionId + 1}: {currentQuestion?.question || ""}</h3>
+                    {/* <ul className="ul">
+                        {currentQuestion ? currentQuestion.options.map((option, index) => (
                             <li key={index}>
                                 <label
                                     className={showAnswer
@@ -129,9 +134,13 @@ export const Choice = () => {
                                     {option.text}
                                 </label>
                             </li>
-                        ))}
-                    </ul>
+                        ))
+                            : <></>
+                        }
+                    </ul> */}
                 </div>
+
+
                 <div className="block">
                     <button
                         disabled={currentQuestionId === 0}
@@ -169,6 +178,7 @@ export const Choice = () => {
                     )}
                 </div>
             </div>
+
         </div>
     );
 }
