@@ -20,11 +20,7 @@ import '../css/choice.css';
 export const Choice = () => {
     const [showReview, setShowReview] = useState(false);
     const [showAnswer, setShowAnswer] = useState(false);
-    const currentQuestionId = useSelector((state) => state.choice.currentQuestionId);
-    const correctAnswer = useSelector((state) => state.choice.correctAnswer);
-    const questions = useSelector((state) => {
-        return state.choice.questions;
-    })
+    const { currentQuestionId, correctAnswer, questions } = useSelector(state => state.choice);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -79,9 +75,6 @@ export const Choice = () => {
     }, [questions]);
 
     const currentQuestion = questions.length ? questions[currentQuestionId] : null
-    console.log("current", currentQuestion)
-
-    console.log("quess", questions)
     return (
         <div className='all'>
             {questions.length ?
@@ -113,35 +106,35 @@ export const Choice = () => {
                             <h3> Question {currentQuestionId + 1}: {currentQuestion?.question || ""}</h3>
                             : <></>}
                         <ul className="ul">
-                            {currentQuestion ? currentQuestion.options.map((option, index) => (
-                                <li key={index}>
-                                    <label
-                                        className={showAnswer
-                                            ? currentQuestion.answer === currentQuestion.trueAnswer
-                                                ? currentQuestion.answer === option.id
-                                                    ? 'correct-answer'
-                                                    : ''
-                                                : currentQuestion.trueAnswer === option.id
-                                                    ? 'correct-answer'
-                                                    : currentQuestion.answer === option.id
-                                                        ? 'incorrect-answer'
+                            {currentQuestion ?
+                                Object.entries(currentQuestion.options).map(([key, value]) => (
+                                    <li key={key}>
+                                        <label
+                                            className={showAnswer
+                                                ? currentQuestion.answer === currentQuestion.trueAnswer
+                                                    ? currentQuestion.answer === key
+                                                        ? 'correct-answer'
                                                         : ''
-                                            : currentQuestion.answer === option.id
-                                                ? 'selected'
-                                                : ''}
-                                    >
-                                        <input
-                                            type="radio"
-                                            name={`question-${currentQuestionId}`}
-                                            value={option.id}
-                                            checked={currentQuestion.answer === option.id}
-                                            onChange={() => handleAnswerSelect(currentQuestionId, option.id)}
-                                        />
-                                        {option.text}
-                                    </label>
-                                </li>
-                            ))
-
+                                                    : currentQuestion.trueAnswer === key
+                                                        ? 'correct-answer'
+                                                        : currentQuestion.answer === key
+                                                            ? 'incorrect-answer'
+                                                            : ''
+                                                : currentQuestion.answer === key
+                                                    ? 'selected'
+                                                    : ''}
+                                        >
+                                            <input
+                                                type="radio"
+                                                name={`question-${currentQuestionId}`}
+                                                value={key}
+                                                checked={currentQuestion.answer === key}
+                                                onChange={() => handleAnswerSelect(currentQuestionId, key)}
+                                            />
+                                            {`${value}`}
+                                        </label>
+                                    </li>
+                                ))
                                 : <></>}
                         </ul>
                     </div>

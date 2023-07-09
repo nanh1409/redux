@@ -4,12 +4,22 @@ import React, { useMemo, useState, useEffect } from 'react';
 import axios from 'axios';
 
 export const shuffleArray = (array) => {
-    const shuffled = [...array];
-    for (let i = shuffled.length - 1; i > 0; i--) {
+    for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));;
-        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        [array[i], array[j]] = [array[j], array[i]];
     }
-    return shuffled;
+    return array;
+}
+
+const shuffleQuestions = (questions) => {
+    shuffleArray(questions)
+    return questions.map((question) => {
+        const shuffleOptions = shuffleArray(Object.entries(question.options));
+        return {
+            ...question,
+            options: Object.fromEntries(shuffleOptions)
+        }
+    })
 }
 
 const initialState = {
@@ -27,8 +37,6 @@ export const fetchData = createAsyncThunk('choice/fetchData', () => {
         .then((response) => response.data)
 })
 
-
-
 const choiceSlice = createSlice({
     name: 'choice',
     initialState,
@@ -38,13 +46,8 @@ const choiceSlice = createSlice({
         })
         builder.addCase(fetchData.fulfilled, (state, action) => {
             state.loading = false
-            state.questions = action.payload
+            state.questions = shuffleQuestions(action.payload)
             state.error = ''
-            state.questions = shuffleArray(state.questions.map(question => ({
-                ...question,
-                options: shuffleArray(question.options)
-            })))
-
         })
         builder.addCase(fetchData.rejected, (state, action) => {
             state.loading = false
@@ -107,8 +110,6 @@ const choiceSlice = createSlice({
     },
 
 })
-
-
 
 // Action creators are generated for each case reducer function
 export const {

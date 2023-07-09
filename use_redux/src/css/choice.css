@@ -30,10 +30,11 @@ input{
   padding: 10px;
   margin-bottom: 10px;
   border-radius: 5px;
+  height: 250px;
 }
 
 .container{
-    height: 350px;
+    height: 360px;
   padding: 20px;
   border-radius: 10px;
   display: flex;

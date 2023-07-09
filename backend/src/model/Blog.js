@@ -4,10 +4,10 @@ const { Schema, model } = mongoose;
 const blogSchema = new Schema({
     id: Number,
     question: String,
-    options: [{
-        id: String,
-        text: String,
-    }],
+    options: {
+        type: Map,
+        of: String
+    },
     answer: String,
     trueAnswer: String
 })
