@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Blog from "../model/Blog";
+import { Blog, Test } from "../model/Blog";
 
 const databaseConnect = () => {
     mongoose.connect(process.env.DATABASE_URL, {
@@ -12,19 +12,25 @@ const databaseConnect = () => {
     })
 }
 
-const question3 = new Blog({
-    id: 5,
-    question: "Rows and silences are ______ and parcel of any marriage.",
-    options: {
-        A: 'package',
-        B: 'stamps',
-        C: 'packet',
-        D: 'part'
-    },
-    answer: null,
-    trueAnswer: "D",
-})
+// const question3 = new Blog({
+//     id: 5,
+//     question: "Rows and silences are ______ and parcel of any marriage.",
+//     options: {
+//         A: 'package',
+//         B: 'stamps',
+//         C: 'packet',
+//         D: 'part'
+//     },
+//     answer: null,
+//     trueAnswer: "D",
+// })
 
-question3.save()
+// question3.save()
+
+// const answer = new Test({
+//     answer: "test",
+// })
+
+// answer.save()
 
 module.exports = databaseConnect;

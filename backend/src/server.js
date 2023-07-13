@@ -9,13 +9,14 @@ let app = express();
 
 app.use(function (req, res, next) {
 
-    res.setHeader('Access-Control-Allow-Origin', process.env.URL_REACT);
+    res.header('Access-Control-Allow-Origin', process.env.URL_REACT);
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
 
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
 
     next();
 });
-
+app.use(express.json())
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
 

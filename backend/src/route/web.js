@@ -4,9 +4,8 @@ import questionController from "../controllers/questionController";
 let router = express.Router()
 
 let webRoutes = (app) => {
-    router.get('/', questionController.test);
-    router.get('/test', questionController.handleGetAllQuestions)
     router.get('/api/questions', questionController.getBlog)
+    router.post('/api/answers', questionController.getAnswer)
 
     return app.use("/", router);
 }

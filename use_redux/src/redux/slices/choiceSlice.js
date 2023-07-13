@@ -29,6 +29,7 @@ const initialState = {
     currentQuestionId: 0,
     completed: false,
     correctAnswer: 0,
+    answer: ''
 }
 
 export const fetchData = createAsyncThunk('choice/fetchData', () => {
@@ -36,6 +37,26 @@ export const fetchData = createAsyncThunk('choice/fetchData', () => {
         .get('http://localhost:8081/api/questions')
         .then((response) => response.data)
 })
+
+
+export const submitAnswer = (answer, question) => {
+    return axios.post("http://localhost:8081/api/answers", {
+        answer: answer,
+        question, question
+    }).then((response) => {
+        console.log(response);
+    });
+
+};
+
+// export const getAnswer = (answer) => {
+//     return axios.post("http://localhost:8081/api/answers", answer);
+// };
+
+// export const getQuestion = async (question) => {
+//     return await axios.post("http://localhost:8081/api/answers", question);
+// };
+
 
 const choiceSlice = createSlice({
     name: 'choice',
@@ -107,6 +128,14 @@ const choiceSlice = createSlice({
         goToQuestion: (state, action) => {
             state.currentQuestionId = action.payload;
         },
+        saveAnswer: (state, action) => {
+            const answer = action.payload.value;
+            const question = action.payload.question;
+            console.log('test', answer)
+            submitAnswer(answer, question)
+            // getQuestion(question)
+
+        },
     },
 
 })
@@ -124,7 +153,8 @@ export const {
     redoTest,
     viewResult,
     addCase,
-    getDataQuestion
+    getDataQuestion,
+    saveAnswer
 } = choiceSlice.actions
 
 export default choiceSlice.reducer;

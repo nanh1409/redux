@@ -14,6 +14,7 @@ import {
     viewResult,
     goToQuestion,
     getDataQuestion,
+    saveAnswer
 } from '../redux/slices/choiceSlice';
 import '../css/choice.css';
 
@@ -27,9 +28,10 @@ export const Choice = () => {
         dispatch(fetchData())
     }, [])
 
-    const handleAnswerSelect = (questionId, answer) => {
+    const handleAnswerSelect = (questionId, answer, value) => {
         dispatch(selectAnswer({ questionId, answer }));
-
+        const question = questions[currentQuestionId].question;
+        dispatch(saveAnswer({ question, value }))
         const completed = answer !== '';
         dispatch(setQuestionCompletion({ questionId, completed }));
     };
@@ -75,6 +77,7 @@ export const Choice = () => {
     }, [questions]);
 
     const currentQuestion = questions.length ? questions[currentQuestionId] : null
+    currentQuestion ? console.log(" currentQuestion:", currentQuestion.answer) : console.log('lo')
     return (
         <div className='all'>
             {questions.length ?
@@ -129,7 +132,7 @@ export const Choice = () => {
                                                 name={`question-${currentQuestionId}`}
                                                 value={key}
                                                 checked={currentQuestion.answer === key}
-                                                onChange={() => handleAnswerSelect(currentQuestionId, key)}
+                                                onChange={() => handleAnswerSelect(currentQuestionId, key, value)}
                                             />
                                             {`${value}`}
                                         </label>

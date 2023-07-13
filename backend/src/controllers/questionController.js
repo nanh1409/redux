@@ -1,16 +1,4 @@
-import Blog from "../model/Blog";
-import questionService from "../services/questionService";
-
-let handleGetAllQuestions = async (req, res) => {
-    let questions = await questionService.getAllQuestions()
-    // res.send("Testt")
-
-    res.send(questions)
-}
-
-let test = (req, res) => {
-    res.send("Test")
-}
+import { Blog, Test } from "../model/Blog";
 
 let getBlog = async (req, res) => {
     Blog.find()
@@ -23,8 +11,28 @@ let getBlog = async (req, res) => {
         });
 }
 
+
+let getAnswer = async (req, res) => {
+    const data = req.body;
+    try {
+        const newAnswer = new Test({
+            question: data.question,
+            answer: data.answer,
+        });
+        await newAnswer.save()
+        res.status(200).json({
+            "message": "answer was insert successfull"
+        })
+    } catch (error) {
+        console.error("Error inserting answer:", error);
+
+        res.status(500).json({
+            "message": "answer was not insert successfull"
+        })
+    }
+}
+
 module.exports = {
-    handleGetAllQuestions: handleGetAllQuestions,
-    test: test,
     getBlog: getBlog,
+    getAnswer: getAnswer
 }
