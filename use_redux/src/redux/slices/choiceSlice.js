@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import React, { useMemo, useState, useEffect } from 'react';
-// import axios from '../../axios';
-import axios from 'axios';
+import axios from '../../axios';
+// import axios from 'axios';
 
 export const shuffleArray = (array) => {
     for (let i = array.length - 1; i > 0; i--) {
@@ -34,29 +34,20 @@ const initialState = {
 
 export const fetchData = createAsyncThunk('choice/fetchData', () => {
     return axios
-        .get('http://localhost:8081/api/questions')
+        .get('/api/questions')
         .then((response) => response.data)
 })
 
 
 export const submitAnswer = (answer, question) => {
-    return axios.post("http://localhost:8081/api/answers", {
+    return axios.post("/api/answers", {
         answer: answer,
-        question, question
+        question:question,
     }).then((response) => {
         console.log(response);
     });
 
 };
-
-// export const getAnswer = (answer) => {
-//     return axios.post("http://localhost:8081/api/answers", answer);
-// };
-
-// export const getQuestion = async (question) => {
-//     return await axios.post("http://localhost:8081/api/answers", question);
-// };
-
 
 const choiceSlice = createSlice({
     name: 'choice',
@@ -131,10 +122,7 @@ const choiceSlice = createSlice({
         saveAnswer: (state, action) => {
             const answer = action.payload.value;
             const question = action.payload.question;
-            console.log('test', answer)
             submitAnswer(answer, question)
-            // getQuestion(question)
-
         },
     },
 
